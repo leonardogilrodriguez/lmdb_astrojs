@@ -21,7 +21,18 @@ git clone https://github.com/LennyGR/lmdb_astrojs.git
 npm install
 ```
 
-3. Iniciar servidor de desarrollo
+3. Crear archivo de configuración
+```bash
+cp .env.example .env
+``` 
+
+Debe contener la KEY de TMDB (https://www.themoviedb.org/)
+
+````
+TMDB_API_KEY=your_api_key_here
+````
+
+4. Iniciar servidor de desarrollo
 ```bash
 npm run dev
 ```
@@ -55,3 +66,9 @@ npm run dev
 - Dockerización
 
 📌 **Nota:** Requiere variables de entorno para configuración de API (ver .env.example)
+
+## Autobombo
+
+He hecho un MCP (Model conext Prrotocol) que usa la misma API para conjuntamente con Claude AI puedas realizar búsquedas inteligentes con la API de TMDB.
+
+https://github.com/leonardogilrodriguez/mcp-tmdb?tab=readme-ov-file
