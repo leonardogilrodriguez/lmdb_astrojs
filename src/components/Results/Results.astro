@@ -1,0 +1,48 @@
+---
+import { getResults } from "@api/index";
+import commonStyles from "../../components/styles.module.css";
+import ResultsList from "./ResultsList.astro";
+
+const { query } = Astro.props;
+
+const getData = async (category: string, query: string) => {
+  if (!query) return null;
+
+  const data = await getResults(category, query);
+  const filteredData =
+    category === "person"
+      ? data.results
+      : data.results.filter((item: Result) => item.release_date !== "");
+  const results = filteredData.sort((a: Result, b: Result) => {
+    if (category === "person") {
+      return a.popularity < b.popularity ? -1 : 1;
+    }
+    return a.release_date > b.release_date ? 1 : -1
+  });
+
+  return results;
+};
+
+const arrayPromises = ["person","movie", "tv"].map(async (category: string) => getData(category, query));
+const results = await Promise.all(arrayPromises);
+const resultsWithCategory = results.map((result, index) => ({
+  category: ["People","Movies", "TV"][index],
+  results: result
+}));
+---
+<div class={commonStyles.container}>
+  {
+    results.flat().length > 0
+    ? resultsWithCategory.map((result) => {
+        if (result?.results?.length === 0) return null;
+          return (
+            <h3>{result.category}</h3>
+            <ResultsList
+              results={result.results}
+              category={result.category.toLowerCase()}
+            />
+        )})
+    : (<p>No results for this search</p>)
+  }
+</div>
+

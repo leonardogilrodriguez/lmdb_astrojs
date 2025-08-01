@@ -1,0 +1,86 @@
+---
+export const prerender = false;
+import { Image } from "astro:assets";
+import commonStyles from "./../styles.module.css";
+import styles from "./movie.module.css";
+import MainCrew from "./MainCrew.astro";
+import { getCredits, getDetails } from "@api/index";
+import { getSafePosterUrl } from "@utils/images";
+import CastCard from "../Card/Card.astro";
+import { MEDIUM_POSTER } from "@utils/consts";
+
+const { id, mediatype } = Astro.props;
+
+const getMovieData = async (id: number): Promise<MovieData> => {
+  const details = await getDetails(id, mediatype);
+  const crew = await getCredits(id, mediatype);
+
+  //Get directors and writers -> here is better to use filter instead of find as filters deliver an array.
+  //Get the director/s
+  const directors = crew?.crew?.filter((item: CrewMember) => {
+    return item.job === "Director" || item.job === "Directing";
+  });
+
+  //Get the writer/s
+  let writers = crew?.crew?.filter((item: CrewMember) => {
+    return (
+      item.job === "Screenplay" ||
+      item.job === "Writer" ||
+      item.job === "Writing"
+    );
+  });
+
+  //Get the stars/s
+  const stars = crew?.cast;
+
+  return { details, crew, directors, writers, stars };
+};
+
+const { details, crew, directors, writers, stars } = await getMovieData(id);
+const showMovie = details && crew && stars;
+const showMainCrew = directors && writers && stars;
+
+const title = details?.title ? details?.title : details?.name;
+const date = details?.release_date
+  ? details?.release_date
+  : details?.first_air_date;
+
+const posterPath = getSafePosterUrl(details?.poster_path, MEDIUM_POSTER);
+---
+{
+  showMovie && (
+    <div class={commonStyles.container}>
+      <div class={styles.movieHeader}>
+        <h1>
+          {title} ({new Date(date).getFullYear()})
+        </h1>
+        <span>
+          {details?.vote_average != null
+            ? Number(details.vote_average).toFixed(1)
+            : "N/A"}/10
+        </span>
+      </div>      
+      <div class={styles.movieTopDetails}>
+        <div class={commonStyles.photo}>
+          <Image
+            alt={title}
+            src={posterPath}
+            width={185}
+            height={278}
+          />
+        </div>
+        {showMainCrew && (
+          <MainCrew
+            details={details}
+            directors={directors}
+            writers={writers}
+            stars={stars}
+            mediatype={mediatype} />
+        )}
+      </div>
+      {
+          stars.map((item: CastMember) => <CastCard result={item} category={"cast"} />)
+      }
+    </div>
+  )
+}

@@ -1,0 +1,22 @@
+---
+import styles from "./home.module.css";
+import { Image } from "astro:assets";
+import { getSafePosterUrl } from "@utils/images";
+import { getPopulars } from "@api/index";
+import { MEDIUM_POSTER } from "@utils/consts";
+const { results: populars } = await getPopulars(1);
+---
+<div class={styles.container} id="ThumbContainer">
+  {
+    populars.map((item: Movie) => (
+      <a href={`/movie/${item.id}`}>
+        <Image
+          width={185}
+          height={278}
+          alt={item.title}
+          src={getSafePosterUrl(item.poster_path, MEDIUM_POSTER)}
+        />
+      </a>
+    ))
+  }
+</div>

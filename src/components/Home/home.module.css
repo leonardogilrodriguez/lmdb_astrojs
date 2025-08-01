@@ -1,0 +1,16 @@
+@media (max-width: 767px) {
+  .container {
+    padding: 1rem;
+  }
+}
+
+.container {
+  width: 100%;
+  padding: 1rem 3rem;
+  max-width: 1008px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+}

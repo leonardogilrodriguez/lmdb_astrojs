@@ -1,0 +1,15 @@
+---
+const { data, limit } = Astro.props;
+const sliceData = data ? data.slice(0, limit) : [];
+---
+{
+  sliceData.map((item: CrewMember, index: number) => {
+    const job = item.job ? item.job : "cast";
+    return (
+      <Fragment key={`${job}_${item.id}`}>
+        <a href={`/person/${item.id}`}>{item.name}</a>
+        {index < sliceData.length - 1 ? ", " : ""}
+      </Fragment>
+    );
+  })
+}

@@ -1,0 +1,10 @@
+---
+export const prerender = false;
+import Layout from "../../layouts/Layout.astro";
+import Results from "../../components/Results/Results.astro";
+
+const { query } = Astro.params;
+---
+<Layout>
+  <Results query={query} />
+</Layout>

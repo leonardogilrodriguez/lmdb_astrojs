@@ -1,0 +1,11 @@
+---
+export const prerender = false;
+
+import Movie from "../../components/Movie/Movie.astro";
+import Layout from "../../layouts/Layout.astro";
+
+const { id } = Astro.params;
+---
+<Layout>
+    <Movie id={id} mediatype={'movie'}/>
+</Layout>

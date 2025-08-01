@@ -1,0 +1,34 @@
+---
+import ResultsCard from '../Card/Card.astro';
+
+const { results, category } = Astro.props;
+let processedResults = results.map((item: Result) => {
+  let date = item.release_date
+    ? item.release_date
+    : item.first_air_date
+      ? item.first_air_date
+      : "";
+  let year = date !== "" ? new Date(date).getFullYear() : 9999;
+  let media_type = Object.keys(item).includes('release_date') ? "movie" : "tv";
+  return { ...item, year: year, media_type: media_type };
+});
+
+processedResults = processedResults.sort((a: Result, b: Result) =>
+  a.year < b.year ? 1 : -1
+);
+---
+{
+  results.length === 0 ? (
+    <h3>No results</h3>
+  ) : (
+    <div id="search_results">
+      {processedResults.map((result: Result, index: number) => (
+        <ResultsCard
+          result={result}
+          index={index}
+          category={category}
+        />
+      ))}
+    </div>
+  )
+}

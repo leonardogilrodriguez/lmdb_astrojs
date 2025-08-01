@@ -1,0 +1,42 @@
+.personTopDetails {
+    display: flex;
+    text-align: justify;
+    flex-direction: column;
+    display:flex;
+    justify-content: center;
+
+    @media (min-width: 768px) {
+        flex-direction: row;
+    }
+}
+
+.personName {
+    border-bottom: 3px solid var(--primary-color);
+}
+
+.personBio {
+    flex: 1;
+
+    p {
+        margin: 0;
+    }
+
+    @media (min-width: 768px) {
+        padding-left: 1rem;
+    }
+}
+
+.personJobHeader {
+    background-color: #Eee;
+    border-top: #E8E8E8 1px solid;
+    cursor: pointer;
+    font-size: 15px;
+    color: #A58500;
+    margin: 1rem 0 1px 0;
+    padding: 6px 10px;
+    text-shadow: 0 0 0.2em #Fff, 0 0 0.2em #Fff;
+
+    h4 {
+        margin: 0;
+    }
+}

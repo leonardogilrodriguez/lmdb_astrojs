@@ -1,0 +1,29 @@
+---
+export const prerender = false;
+import styles from "./movie.module.css";
+import PeopleGroup from "./PeopleGroup.astro";
+
+const { details, directors, writers, stars, mediatype } = Astro.props;
+---
+<div class={styles.movieMainCrew}>
+  <p>{details.overview}</p>
+  {
+    mediatype == "movie" ? (
+      <>
+        <p>
+          <span>Director:</span><PeopleGroup limit={5} data={directors} />
+        </p>
+        <p>
+          <span>Writer:</span><PeopleGroup limit={5} data={writers} />
+        </p>
+      </>
+    ) : (
+      <p>
+        <span>Creators:</span><PeopleGroup limit={5} data={details.created_by} />
+      </p>
+    )
+  }
+  <p>
+    <span>Stars:</span><PeopleGroup limit={5} data={stars} />
+  </p>
+</div>

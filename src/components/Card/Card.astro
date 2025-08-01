@@ -1,0 +1,120 @@
+---
+import { NO_IMAGE_URL, SMALL_POSTER } from "@utils/consts";
+import { getSafePosterUrl } from "@utils/images";
+import commonStyles from "../../components/styles.module.css";
+
+interface ResultCardProps {
+  result: Result;
+  category: string;
+}
+
+interface CategoryConfig {
+  getTitle: () => string;
+  getSubtitle: () => string;
+  getImage: () => string;
+  getMediaType: () => string;
+  getYear: () => string;
+  showRating: boolean;
+}
+
+const { result, category } = Astro.props as ResultCardProps;
+
+// Diccionario de configuración por categoría con tipado
+const categoryConfig: Record<string, CategoryConfig> = {
+  people: {
+    getTitle: (): string => result.name || "Untitled",
+    getSubtitle: (): string => {
+      const department = result.known_for_department || "";
+      const knownFor = result.known_for
+        ? result.known_for.map((item) => item.title || item.name).join(", ")
+        : "";
+      return `${department}${knownFor ? ` - ${knownFor}` : ""}`.trim();
+    },
+    getImage: (): string => getSafePosterUrl(result.profile_path, SMALL_POSTER),
+    getMediaType: (): string => "person",
+    getYear: (): string => "",
+    showRating: false,
+  },
+  movies: {
+    getTitle: (): string => result.title || "Untitled",
+    getSubtitle: (): string => result.original_title || "Untitled",
+    getImage: (): string => getSafePosterUrl(result.poster_path, SMALL_POSTER),
+    getMediaType: (): string => result.media_type || "movie",
+    getYear: (): string => `(${result.year === 9999 ? "-" : result.year})`,
+    showRating: true,
+  },
+  tv: {
+    getTitle: (): string => result.name || "Untitled",
+    getSubtitle: (): string => result.original_name || "Untitled",
+    getImage: (): string => getSafePosterUrl(result.poster_path, SMALL_POSTER),
+    getMediaType: (): string => result.media_type || "tv",
+    getYear: (): string => `(${result.year === 9999 ? "-" : result.year})`,
+    showRating: true,
+  },
+  combined: {
+    getTitle: (): string => result.title || result.name || "Untitled",
+    getSubtitle: (): string => {
+      if (Object.keys(result).includes('character')) return result.character || '';
+
+      return result.original_title || result.original_name || "Untitled";
+    },
+    getImage: (): string => getSafePosterUrl(result.poster_path, SMALL_POSTER),
+    getMediaType: (): string => result.media_type || "movie",
+    getYear: (): string => `(${result.year === 9999 ? "-" : result.year})`,
+    showRating: true,
+  },
+  cast: {
+    getTitle: (): string => result.name || "Untitled",
+    getSubtitle: (): string => result.character || "",
+    getImage: (): string => getSafePosterUrl(result.profile_path, SMALL_POSTER),
+    getMediaType: (): string => "person",
+    getYear: (): string => '',
+    showRating: false,
+  },
+};
+
+// Configuración por defecto
+const defaultConfig: CategoryConfig = {
+  getTitle: (): string => "Untitled",
+  getSubtitle: (): string => "Untitled",
+  getImage: (): string => NO_IMAGE_URL,
+  getMediaType: (): string => "movie",
+  getYear: (): string => "",
+  showRating: false,
+};
+
+// Obtener configuración según categoría
+const config: CategoryConfig = categoryConfig[category] || defaultConfig;
+
+// Valores finales
+const title: string = config.getTitle();
+const subtitle: string = config.getSubtitle();
+const image: string = config.getImage();
+const mediaType: string = config.getMediaType();
+const year: string = config.getYear();
+const showRating: boolean = config.showRating;
+---
+
+<div class={commonStyles.listCard}>
+  <div class={commonStyles.listImage}>
+    <img height="72" width="48" alt={title} src={image} />
+  </div>
+  <div class={commonStyles.listMain}>
+    <div class={commonStyles.listCardTitle}>
+      <a href={`/${mediaType}/${result.id}`}>
+        {title}
+        {year}
+      </a>
+      <span>{subtitle}</span>
+    </div>
+    {
+      showRating && (
+        <div class={commonStyles.listCardRating}>
+          {result.vote_count && result.vote_count > 0 && result.vote_average
+            ? result.vote_average.toFixed(1)
+            : "-"}
+        </div>
+      )
+    }
+  </div>
+</div>
