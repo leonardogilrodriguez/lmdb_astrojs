@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  astro-lmdb:
+    build: .
+    ports:
+      - "6543:4321"  # Exponer el puerto 4321 como 6543
+    command: npm start
+    container_name: astrojs_lmdb

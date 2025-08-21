@@ -10,4 +10,7 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone',
   }),
+  server: {
+    host: true, //para exponer hacia fuera
+  },
 });
