@@ -6,8 +6,6 @@ export const NUM_LEVELS = 20;
 export const NUM_PAGES = 500;
 export const SMALL_POSTER = 92;
 export const MEDIUM_POSTER = 185;
-export const SMALL_PROFILE = 45;
-export const PROFILE = 185;
 
 export const IMAGE_CARD_URL = `https://image.tmdb.org/t/p/w{size}`;
 
