@@ -1,74 +1,77 @@
 # LMDB AstroJS Project
 
-Aplicación web para explorar películas/series, desarrollada con Astro y React.
+Web application to explore movies/TV shows, developed with Astro and React.
 
-## Características principales
-- Búsqueda de contenido multimedia
-- Detalles de películas, series y personas
-- Diseño responsive con módulos CSS
-- Enrutamiento dinámico para páginas de detalles
-- Integración con API externa (implícito por estructura de código)
+## Main Features
+- Multimedia content search
+- Details for movies, TV shows, and people
+- Responsive design with CSS modules
+- Dynamic routing for detail pages
+- Integration with external API (implied by code structure)
 
-## 🚀 Instalación y uso
+## 🚀 Installation and usage
 
-1. Clonar repositorio
+1. Clone repository
 ```bash
-git clone https://github.com/LennyGR/lmdb_astrojs.git
+git clone https://github.com/leonardogilrodriguez/lmdb_astrojs.git
 ```
 
-2. Instalar dependencias
+2. Install dependencies
 ```bash
 npm install
 ```
 
-3. Crear archivo de configuración
+3. Create configuration file
 ```bash
 cp .env.example .env
 ``` 
 
-Debe contener la KEY de TMDB (https://www.themoviedb.org/)
+Must contain TMDB API KEY (https://www.themoviedb.org/)
 
 ````
 TMDB_API_KEY=your_api_key_here
 ````
 
-4. Iniciar servidor de desarrollo
+4. Start development server
 ```bash
 npm run dev
 ```
 
-## Tecnologías principales
+## Main technologies
 - Astro (v5.1.1)
 - React (v19)
-- Módulos CSS
-- Enrutamiento dinámico
-- Componentes Astro/React
+- CSS modules
+- Dynamic routing
+- Typescript (v5.6.3)
 
-## Estructura clave
+## Key structure
 ```
 /src
-├── components/     # Componentes reutilizables
-├── pages/          # Enrutamiento automático
-├── API/            # Lógica de servicios
-├── reactjs/        # Componentes React específicos
-└── layouts/        # Plantillas de página
+├── components/     # Reusable components
+├── pages/          # Automatic routing
+├── API/            # Service logic
+├── reactjs/        # Specific React components
+└── layouts/        # Page templates
+└── utils/          # Utility functions
 ```
 
-## Mejoras futuras
-- Implementar sistema de caché para API
-- Añadir testing con Playwright
-- Internacionalización (i18n)
-- Optimizar carga de imágenes (source sets)
-- Mejoras CSS con Tailwind
-- Virtualizar listados largos
-- Mejoras de SEO (figure...)
-- Más islas
-- Dockerización
+## Future improvements
+- Implement API caching system
+- Add testing with Playwright
+- Internationalization (i18n)
+- Optimize image loading (source sets)
+- CSS improvements with Tailwind
+- List virtualization
+- SEO enhancements (figure...)
+- More "islands"
 
-📌 **Nota:** Requiere variables de entorno para configuración de API (ver .env.example)
+📌 **Note:** Requires environment variables for API configuration (see .env.example)
 
-## Autobombo
+## Shameless Plug
 
-He hecho un MCP (Model conext Prrotocol) que usa la misma API para conjuntamente con Claude AI puedas realizar búsquedas inteligentes con la API de TMDB.
+I created an MCP (Model Context Protocol) that uses the same API to perform smart searches with Claude AI using TMDB's API.
 
 https://github.com/leonardogilrodriguez/mcp-tmdb?tab=readme-ov-file
+
+BONUS: The same development but using NextJS instead of AstroJS:
+https://github.com/leonardogilrodriguez/lmdb_nextjs
