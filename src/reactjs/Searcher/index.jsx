@@ -1,11 +1,7 @@
-import { useState, useMemo } from "react";
-//import { Container, FormWrapper, Logo } from './Searcher.styles';
-//import { useRouter } from 'next/router';
+import { useState } from "react";
 import styles from "./styles.module.css";
 
 const Searcher = () => {
-  //const router = useRouter();
-  //const { query } = router.query
   const [searchText, setSearchText] = useState("");
 
   const onChange = (event) => {
@@ -15,12 +11,10 @@ const Searcher = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const query = searchText.split(" ").join("+");
-    //router.push('/results/'+query);
     window.location.href = `/results/${query}`;
   };
 
   const goHome = () => {
-    //router.push('/');
     window.location.href = "/";
   };
 
