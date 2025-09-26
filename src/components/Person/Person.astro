@@ -1,78 +1,13 @@
 ---
-import {
-  getCombinedDetailsPerson,
-  getPerson,
-  getPersonTranslation,
-} from "@api/index";
 import commonStyles from "./../styles.module.css";
 import styles from "./person.module.css";
 import ResultsList from "../Results/ResultsList.astro";
-import { getSafePosterUrl } from "@utils/images";
 import { Image } from "astro:assets";
-import { AUX_JOBS_KEYS, MEDIUM_POSTER } from "@utils/consts";
+import { getPeople } from "@utils/getPeople";
 
-type KnownForDepartment = keyof typeof AUX_JOBS_KEYS;
+const { data } = Astro.props;
 
-const { id } = Astro.props;
-
-const getPersonData = async (id: number) => {
-  const [combined, person, translations] = await Promise.all([
-    getCombinedDetailsPerson(id),
-    getPerson(id),
-    getPersonTranslation(id)
-  ]);
-
-  const details = { ...person };
-  
-  if (!details.biography) {
-    const englishTranslation = translations.translations.find(
-      (item: Translation) => item.name === "English"
-    )?.data?.biography;
-    
-    if (englishTranslation) {
-      details.biography = englishTranslation;
-    }
-  }
-
-  const jobs = combined.crew.reduce((acc: Record<string, CrewMember[]>, curr: CrewMember) => {
-    if (!curr.job) return acc;
-    acc[curr.job] = [...(acc[curr.job] || []), curr];
-    return acc;
-  }, {} as Record<string, CrewMember[]>);
-
-  if (combined.cast?.length) {
-    jobs["Acting"] = combined.cast;
-  }
-
-  const allCombined = [...(combined.cast || []), ...(combined.crew || [])];
-  const uniqueCombined = Array.from(
-    new Map(allCombined.map(item => [item.id, item])).values()
-  );
-
-  const knownForDepartment = AUX_JOBS_KEYS[details.known_for_department as KnownForDepartment];
-  // const knownFor = uniqueCombined
-  //   .filter((item) => item.job === knownForDepartment)
-  //   .sort((a, b) => b.popularity - a.popularity);
-
-  const knownFor = jobs[knownForDepartment]?.sort((a: Member, b: Member) => b.popularity - a.popularity);
-
-  return { details, jobs, knownFor };
-};
-
-const { details, jobs, knownFor } = await getPersonData(id);
-
-const jobKeys = Object.keys(jobs || {});
-if (details) {
-  const knownForKey = AUX_JOBS_KEYS[details.known_for_department as KnownForDepartment] ||
-                    details.known_for_department;
-  const index = jobKeys.indexOf(knownForKey);
-  if (index > -1) {
-    jobKeys.splice(index, 1);
-    jobKeys.unshift(knownForKey);
-  }
-}
-
-const profilePath = getSafePosterUrl(details?.profile_path, MEDIUM_POSTER);
+const { details, jobs, jobKeys, knownFor, profilePath } = data;
 ---
 
 <div class={commonStyles.container}>
@@ -99,7 +34,7 @@ const profilePath = getSafePosterUrl(details?.profile_path, MEDIUM_POSTER);
     </>
   )}
   
-  {jobs && jobKeys.map((jobTitle) => (
+  {jobs && jobKeys.map((jobTitle: string) => (
     <div class={styles.jobSection}>
       <div class={styles.personJobHeader}>
         <h4>

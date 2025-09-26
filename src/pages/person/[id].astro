@@ -1,11 +1,13 @@
 ---
 export const prerender = false;
 
+import { getPeople } from "@utils/getPeople";
 import Person from "../../components/Person/Person.astro";
 import Layout from "../../layouts/Layout.astro";
 
-const { id } = Astro.params;
+const { id = '' } = Astro.params;
+const data = await getPeople(id);
 ---
-<Layout>
-    <Person id={id} />
+<Layout title={data.details.name}>
+    <Person data={data} />
 </Layout>

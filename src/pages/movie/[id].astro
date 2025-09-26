@@ -1,11 +1,14 @@
 ---
 export const prerender = false;
 
+import { getMovie } from "@utils/getMovie";
 import Movie from "../../components/Movie/Movie.astro";
 import Layout from "../../layouts/Layout.astro";
 
-const { id } = Astro.params;
+const { id = '' } = Astro.params;
+const mediatype = 'movie';
+const { title, date, ...rest } = await getMovie(id, mediatype);
 ---
-<Layout>
-    <Movie id={id} mediatype={'movie'}/>
+<Layout title={`${title} (${new Date(date).getFullYear()})`}>
+    <Movie data={{...rest, title, date, mediatype}}/>
 </Layout>

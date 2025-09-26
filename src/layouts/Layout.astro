@@ -1,6 +1,8 @@
 ---
 import Searcher from "../components/Search.astro";
 import Footer from '../pages/footer.md';
+
+const { title = 'Astro LMDB' } = Astro.props;
 ---
 
 <!doctype html>
@@ -10,7 +12,7 @@ import Footer from '../pages/footer.md';
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro LMDB</title>
+    <title>{title}</title>
   </head>
   <body>
     <div id="app">
